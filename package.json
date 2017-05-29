@@ -1,0 +1,19 @@
+{
+  "name": "phoenix-client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/mcampa/phoenix-client.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mcampa/phoenix-client/issues"
+  },
+  "homepage": "https://github.com/mcampa/phoenix-client#readme"
+}
