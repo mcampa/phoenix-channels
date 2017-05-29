@@ -11,8 +11,7 @@
 //
 // The `Socket` constructor takes the mount point of the socket,
 // the authentication params, as well as options that can be found in
-// the Socket docs, such as configuring the `LongPoll` transport, and
-// heartbeat.
+// the Socket docs, such as configuring the heartbeat.
 //
 // ## Channels
 //
@@ -170,7 +169,5 @@
 module.exports = {
   Channel: require('./channel'),
   Socket: require('./socket'),
-  LongPoll: require('./long-poll'),
-  Ajax: require('./ajax'),
   Presence: require('./presence'),
 }

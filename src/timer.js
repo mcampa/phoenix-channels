@@ -35,3 +35,5 @@ class Timer {
     }, this.timerCalc(this.tries + 1))
   }
 }
+
+module.exports = Timer

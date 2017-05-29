@@ -18,7 +18,6 @@ module.exports = {
         leave: "phx_leave",
     },
     TRANSPORTS: {
-        longpoll: "longpoll",
         websocket: "websocket",
     },
 }

@@ -7,10 +7,9 @@ const {
   WS_CLOSE_NORMAL ,
 } = require('./constants')
 
+const querystring = require('querystring')
 const WebSocket = require('websocket').w3cwebsocket
-const LongPoll = require('./long-poll')
 const Timer = require('./timer')
-const Ajax = require('./ajax')
 const Channel = require('./channel')
 
 class Socket {
@@ -21,8 +20,8 @@ class Socket {
   //                                               "wss://example.com"
   //                                               "/socket" (inherited host & protocol)
   // opts - Optional configuration
-  //   transport - The Websocket Transport, for example WebSocket or Phoenix.LongPoll.
-  //               Defaults to WebSocket with automatic LongPoll fallback.
+  //   transport - The Websocket Transport, for example WebSocket.
+  //
   //   encode - The function to encode outgoing messages. Defaults to JSON:
   //
   //     (payload, callback) => callback(JSON.stringify(payload))
@@ -52,22 +51,18 @@ class Socket {
   // For IE8 support use an ES5-shim (https://github.com/es-shims/es5-shim)
   //
   constructor(endPoint, opts = {}){
-    console.log('!!!!!!!!', endPoint)
     this.stateChangeCallbacks = {open: [], close: [], error: [], message: []}
     this.channels             = []
     this.sendBuffer           = []
     this.ref                  = 0
     this.timeout              = opts.timeout || DEFAULT_TIMEOUT
-    this.transport            = opts.transport || WebSocket || LongPoll
+    this.transport            = opts.transport || WebSocket
     this.defaultEncoder       = (payload, callback) => callback(JSON.stringify(payload))
     this.defaultDecoder       = (payload, callback) => callback(JSON.parse(payload))
-    if(this.transport !== LongPoll){
-      this.encode = opts.encode || this.defaultEncoder
-      this.decode = opts.decode || this.defaultDecoder
-    } else {
-      this.encode = this.defaultEncoder
-      this.decode = this.defaultDecoder
-    }
+
+    this.encode = opts.encode || this.defaultEncoder
+    this.decode = opts.decode || this.defaultDecoder
+
     this.heartbeatIntervalMs  = opts.heartbeatIntervalMs || 30000
     this.reconnectAfterMs     = opts.reconnectAfterMs || function(tries){
       return [1000, 2000, 5000, 10000][tries - 1] || 10000
@@ -83,15 +78,15 @@ class Socket {
     }, this.reconnectAfterMs)
   }
 
-  protocol(){ return window.location.protocol.match(/^https/) ? "wss" : "ws" }
-
   endPointURL(){
-    let uri = Ajax.appendParams(
-      Ajax.appendParams(this.endPoint, this.params), {vsn: VSN})
-    if(uri.charAt(0) !== "/"){ return uri }
-    if(uri.charAt(1) === "/"){ return `${this.protocol()}:${uri}` }
+    return this.appendParams(this.appendParams(this.endPoint, this.params), {vsn: VSN})
+  }
 
-    return `${this.protocol()}://${window.location.host}${uri}`
+  appendParams(url, params){
+    if(Object.keys(params).length === 0){ return url }
+
+    let prefix = url.match(/\?/) ? "&" : "?"
+    return `${url}${prefix}${querystring.stringify(params)}`
   }
 
   disconnect(callback, code, reason){
@@ -103,12 +98,7 @@ class Socket {
     callback && callback()
   }
 
-  // params - The params to send when connecting, for example `{user_id: userToken}`
-  connect(params){
-    if(params){
-      console && console.log("passing params to connect is deprecated. Instead pass :params to the Socket constructor")
-      this.params = params
-    }
+  connect(){
     if(this.conn){ return }
 
     this.conn = new this.transport(this.endPointURL())
