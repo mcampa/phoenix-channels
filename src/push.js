@@ -36,7 +36,7 @@ class Push {
       topic: this.channel.topic,
       event: this.event,
       payload: this.payload,
-      ref: this.ref
+      ref: this.ref,
     })
   }
 

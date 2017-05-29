@@ -1,4 +1,6 @@
 const { CHANNEL_EVENTS, CHANNEL_STATES } = require('./constants')
+const Push = require('./push')
+const Timer = require('./timer')
 
 class Channel {
   constructor(topic, params, socket) {

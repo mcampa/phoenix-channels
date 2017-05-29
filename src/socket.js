@@ -1,4 +1,17 @@
-const { VSN, CHANNEL_EVENTS, SOCKET_STATES, DEFAULT_TIMEOUT, WS_CLOSE_NORMAL } = require('./constants')
+const {
+  VSN,
+  CHANNEL_EVENTS,
+  TRANSPORTS,
+  SOCKET_STATES,
+  DEFAULT_TIMEOUT,
+  WS_CLOSE_NORMAL ,
+} = require('./constants')
+
+const WebSocket = require('websocket').w3cwebsocket
+const LongPoll = require('./long-poll')
+const Timer = require('./timer')
+const Ajax = require('./ajax')
+const Channel = require('./channel')
 
 class Socket {
 
@@ -39,12 +52,13 @@ class Socket {
   // For IE8 support use an ES5-shim (https://github.com/es-shims/es5-shim)
   //
   constructor(endPoint, opts = {}){
+    console.log('!!!!!!!!', endPoint)
     this.stateChangeCallbacks = {open: [], close: [], error: [], message: []}
     this.channels             = []
     this.sendBuffer           = []
     this.ref                  = 0
     this.timeout              = opts.timeout || DEFAULT_TIMEOUT
-    this.transport            = opts.transport || window.WebSocket || LongPoll
+    this.transport            = opts.transport || WebSocket || LongPoll
     this.defaultEncoder       = (payload, callback) => callback(JSON.stringify(payload))
     this.defaultDecoder       = (payload, callback) => callback(JSON.parse(payload))
     if(this.transport !== LongPoll){
@@ -69,7 +83,7 @@ class Socket {
     }, this.reconnectAfterMs)
   }
 
-  protocol(){ return location.protocol.match(/^https/) ? "wss" : "ws" }
+  protocol(){ return window.location.protocol.match(/^https/) ? "wss" : "ws" }
 
   endPointURL(){
     let uri = Ajax.appendParams(
@@ -77,7 +91,7 @@ class Socket {
     if(uri.charAt(0) !== "/"){ return uri }
     if(uri.charAt(1) === "/"){ return `${this.protocol()}:${uri}` }
 
-    return `${this.protocol()}://${location.host}${uri}`
+    return `${this.protocol()}://${window.location.host}${uri}`
   }
 
   disconnect(callback, code, reason){

@@ -74,7 +74,9 @@ var Presence = {
     return Object.getOwnPropertyNames(obj).map(key => func(key, obj[key]))
   },
 
-  clone(obj){ return JSON.parse(JSON.stringify(obj)) }
+  clone(obj){
+      return JSON.parse(JSON.stringify(obj))
+  },
 }
 
 module.exports = Presence
