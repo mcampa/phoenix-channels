@@ -1,23 +1,34 @@
 {
   "name": "phoenix-client",
   "version": "1.0.0",
-  "description": "",
+  "description": "Phoenix Channels Client",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint ./src"
+    "mocha": "mocha ./test/**/*.js --compilers js:babel-register -r jsdom-global/register",
+    "lint": "eslint ./src",
+    "test": "npm run lint && npm run mocha"
   },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/mcampa/phoenix-client.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Chris McCord <chris@chrismccord.com> (http://www.phoenixframework.org)",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/mcampa/phoenix-client/issues"
   },
   "homepage": "https://github.com/mcampa/phoenix-client#readme",
   "dependencies": {
     "websocket": "^1.0.24"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.24.1",
+    "babel-register": "^6.24.1",
+    "eslint": "^3.19.0",
+    "jsdom": "9.8.3",
+    "jsdom-global": "2.1.0",
+    "mocha": "~2.4.4",
+    "mock-socket": "^6.0.1",
+    "sinon": "^1.17.6"
   }
 }

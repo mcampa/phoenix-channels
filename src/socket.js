@@ -79,7 +79,7 @@ class Socket {
   }
 
   endPointURL(){
-    return this.appendParams(this.appendParams(this.endPoint, this.params), {vsn: VSN})
+    return this.appendParams(this.endPoint, Object.assign({}, this.params, {vsn: VSN}))
   }
 
   appendParams(url, params){
