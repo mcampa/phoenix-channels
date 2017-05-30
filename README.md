@@ -6,7 +6,7 @@ The differece with the original client is that this does not use long-polling an
 # Usage
 This uses the same API as the original [phoenix](https://www.npmjs.com/package/phoenix) except that it needs an absolute url
 ```javascript
-const { Socket } = require('phoenix-client')
+const { Socket } = require('phoenix-channels')
 
 let socket = new Socket("ws://example.com/socket")
 
@@ -22,7 +22,7 @@ channel.join()
 `Presence` is also available
 
 # Installation
-`npm install --save phoenix-client`
+`npm install --save phoenix-channels`
 
 # Authors
 API was made by authors of the [Phoenix Framework](http://www.phoenixframework.org/)

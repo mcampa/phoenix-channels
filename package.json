@@ -1,5 +1,5 @@
 {
-  "name": "phoenix-client",
+  "name": "phoenix-channels",
   "version": "1.0.0",
   "description": "Phoenix Channels Client",
   "main": "src/index.js",
