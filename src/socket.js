@@ -73,8 +73,11 @@ class Socket {
     this.endPoint             = `${endPoint}/${TRANSPORTS.websocket}`
     this.heartbeatTimer       = null
     this.pendingHeartbeatRef  = null
+    this.shouldReconnect      = true
     this.reconnectTimer       = new Timer(() => {
-      this.disconnect(() => this.connect())
+      this._disconnect(() => {
+        if (this.shoulReconnect) { this.connect() }
+      })
     }, this.reconnectAfterMs)
   }
 
@@ -90,6 +93,11 @@ class Socket {
   }
 
   disconnect(callback, code, reason){
+    this.shoulReconnect = false
+    this._disconnect(callback, code, reason)
+  }
+
+  _disconnect(callback, code, reason){
     if(this.conn){
       this.conn.onclose = function(){} // noop
       if(code){ this.conn.close(code, reason || "") } else { this.conn.close() }
@@ -101,6 +109,7 @@ class Socket {
   connect(){
     if(this.conn){ return }
 
+    this.shoulReconnect = true
     this.conn = new this.transport(this.endPointURL())
     this.conn.timeout   = this.longpollerTimeout
     this.conn.onopen    = () => this.onConnOpen()
