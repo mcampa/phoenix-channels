@@ -8,7 +8,7 @@ The difference with the original client is that this does not use long-polling a
 # Usage
 This uses the same API as the original [phoenix](https://www.npmjs.com/package/phoenix) except that it needs an absolute url
 ```javascript
-const { Socket } = require('phoenix-channels')
+import { Socket } from 'phoenix-channels';
 
 let socket = new Socket("ws://example.com/socket")
 
